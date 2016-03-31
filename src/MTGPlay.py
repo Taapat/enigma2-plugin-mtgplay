@@ -309,7 +309,17 @@ class MTGPlayMenu(Screen):
 
 	def listSeasonVideos(self, channelId):
 		content = []
-		formats = self.callApi('videos?season=%i' % channelId)
+		next = 'videos?season=%i&page=1' % channelId
+		while next:
+			videos, next = self.callSeasonVideos(next)
+			content.extend(videos)
+		content.sort(key=lambda x: x[0])
+		return content
+
+	def callSeasonVideos(self, videos):
+		content = []
+		next = None
+		formats = self.callApi(videos)
 		try:
 			for x in formats['_embedded']['videos']:
 				content.append((
@@ -319,7 +329,12 @@ class MTGPlayMenu(Screen):
 						str(x['description']).encode('utf-8')))
 		except:
 			pass
-		return content
+		try:
+			if 'next' in formats['_links']:
+				next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
+		except:
+			next = None
+		return content, next
 
 	def getVideoStream(self, channelId):
 		formats = self.callApi('videos/stream/%i' % channelId)
