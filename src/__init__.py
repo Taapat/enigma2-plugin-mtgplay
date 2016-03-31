@@ -5,12 +5,12 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
 
 def localeInit():
-	bindtextdomain("TV3Play", resolveFilename(SCOPE_PLUGINS,
-		"Extensions/TV3Play/locale"))
+	bindtextdomain('MTGPlay', resolveFilename(SCOPE_PLUGINS,
+		'Extensions/MTGPlay/locale'))
 
 
 def _(txt):
-	t = dgettext("TV3Play", txt)
+	t = dgettext('MTGPlay', txt)
 	if t == txt:
 		t = gettext(txt)
 	return t
