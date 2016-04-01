@@ -225,7 +225,7 @@ class MTGPlayMenu(Screen):
 	def Ok(self):
 		current = self['list'].getCurrent()
 		if current:
-			print '[MTG Play] Select:', current[0]
+			print '[MTG Play] Select:', current[2], current[0]
 			if current[2] == 'back':
 				self.menulist -= 1
 				if self.menulist < 0:
