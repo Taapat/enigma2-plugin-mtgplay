@@ -233,7 +233,7 @@ class MTGPlayMenu(Screen):
 				content = self.storedContent[self.menulist]
 			else:
 				self.menulist += 1
-				if self.menulist == 4:
+				if self.menulist == 4 and '&page=' not in str(current[2]):
 					self.playVideo(current[0], self.getVideoStream(current[2]))
 				else:
 					if self.menulist == 1:
@@ -241,6 +241,9 @@ class MTGPlayMenu(Screen):
 					elif self.menulist == 2:
 						content = self.listFormatsChannel(current[2])
 					elif self.menulist == 3:
+						content = self.listVideosFormat(current[2])
+					elif self.menulist == 4:
+						self.menulist = 3
 						content = self.listVideosFormat(current[2])
 					content.insert(0, (_('Return back...'), None, 'back', ''))
 					self.storedContent[self.menulist] = content
@@ -326,13 +329,17 @@ class MTGPlayMenu(Screen):
 
 	def listVideosFormat(self, channelId):
 		content = []
-		next = 'videos?format=%i&page=1' % channelId
+		if '&page=' in str(channelId):
+			next = channelId
+		else:
+			next = 'videos?format=%i&page=1' % channelId
 		count = 0
-		while next and count < 6: # More than 6 pages are too long
+		while next and count < 5: # More than 5 pages are too long
 			count += 1
 			videos, next = self.callVideosFormat(next)
 			content.extend(videos)
-		content.sort(key=lambda x: x[0])
+		if next:
+			content.append((_('Next videos...'), None, next, ''))
 		return content
 
 	def callVideosFormat(self, videos):
