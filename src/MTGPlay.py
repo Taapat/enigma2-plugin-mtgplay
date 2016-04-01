@@ -239,9 +239,9 @@ class MTGPlayMenu(Screen):
 					if self.menulist == 1:
 						content = self.listChannels(current[2])
 					elif self.menulist == 2:
-						content = self.listSeasons(current[2])
+						content = self.listFormatsChannel(current[2])
 					elif self.menulist == 3:
-						content = self.listSeasonVideos(current[2])
+						content = self.listVideosFormat(current[2])
 					content.insert(0, (_('Return back...'), None, 'back', ''))
 					self.storedContent[self.menulist] = content
 			if self.menulist > 3:
@@ -294,32 +294,51 @@ class MTGPlayMenu(Screen):
 			next = None
 		return content, next
 
-	def listSeasons(self, channelId):
+	def listFormatsChannel(self, channelId):
 		content = []
-		formats = self.callApi('seasons?channel=%i' % channelId)
+		next = 'formats?channel=%i&page=1' % channelId
+		count = 0
+		while next and count < 6: # More than 6 pages are too long
+			count += 1
+			videos, next = self.callFormatsChannel(next)
+			content.extend(videos)
+		content.sort(key=lambda x: x[0])
+		return content
+
+	def callFormatsChannel(self, videos):
+		content = []
+		next = None
+		formats = self.callApi(videos)
 		try:
-			for x in formats['_embedded']['seasons']:
+			for x in formats['_embedded']['formats']:
 				content.append((
 						str(x['title']).encode('utf-8'),
 						str(x['_links']['image']['href']).replace('{size}', '290x162'),
 						x['id'], ''))
 		except:
 			pass
-		return content
+		try:
+			if 'next' in formats['_links']:
+				next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
+		except:
+			next = None
+		return content, next
 
-	def listSeasonVideos(self, channelId):
+	def listVideosFormat(self, channelId):
 		content = []
-		next = 'videos?season=%i&page=1' % channelId
-		while next:
-			videos, next = self.callSeasonVideos(next)
+		next = 'videos?format=%i&page=1' % channelId
+		count = 0
+		while next and count < 6: # More than 6 pages are too long
+			count += 1
+			videos, next = self.callVideosFormat(next)
 			content.extend(videos)
 		content.sort(key=lambda x: x[0])
 		return content
 
-	def callSeasonVideos(self, videos):
+	def callVideosFormat(self, videos):
 		content = []
 		next = None
-		formats = self.callApi(videos)
+		formats = self.callApi(videos+'&order=-airdate')
 		try:
 			for x in formats['_embedded']['videos']:
 				content.append((
