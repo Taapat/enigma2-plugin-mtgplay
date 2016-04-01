@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-31 19:23+0300\n"
+"POT-Creation-Date: 2016-04-01 22:13+0300\n"
 "PO-Revision-Date: 2016-03-31 19:23+0300\n"
 "Last-Translator: Tapat <taapat@gmail.com>\n"
 "Language-Team: \n"
@@ -17,6 +17,9 @@ msgstr "Iziet"
 
 msgid "MTG Play"
 msgstr "MTG Play"
+
+msgid "Next videos..."
+msgstr "Nākamie raidījumi..."
 
 msgid "Ok"
 msgstr "Labi"
