@@ -373,7 +373,8 @@ class MTGPlayMenu(Screen):
 						.replace('.flv', '.mp4')\
 						.replace('/flv:', '/mp4:')
 		except:
-			return ''
+			pass
+		return ''
 
 	def callApi(self, urlType):
 		url = 'http://playapi.mtgx.tv/v3/%s' % urlType
