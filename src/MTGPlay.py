@@ -228,8 +228,6 @@ class MTGPlayMenu(Screen):
 			print '[MTG Play] Select:', current[2], current[0]
 			if current[2] == 'back':
 				self.menulist -= 1
-				if self.menulist < 0:
-					self.menulist = 0
 				content = self.storedContent[self.menulist]
 			else:
 				self.menulist += 1
