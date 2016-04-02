@@ -365,7 +365,10 @@ class MTGPlayMenu(Screen):
 	def getVideoStream(self, channelId):
 		formats = self.callApi('videos/stream/%i' % channelId)
 		try:
-			return str(formats['streams']['hls'])
+			if formats['streams']['hls']:
+				return str(formats['streams']['hls'])
+			elif formats['streams']['medium']:
+				return str(formats['streams']['medium']).replace('cache/', 'cache//')
 		except:
 			return ''
 
