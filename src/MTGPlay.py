@@ -397,4 +397,4 @@ class MTGPlayMenu(Screen):
 			print '[MTG Play] Not found stream to play', title
 			self.session.open(MessageBox,
 					_('Can not play: %s\nPerhaps content is not provided for this region.')
-					% title, MessageBox.TYPE_INFO, timeout = 5)
+					% title, MessageBox.TYPE_ERROR)
