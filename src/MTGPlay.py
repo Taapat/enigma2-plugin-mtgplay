@@ -334,7 +334,7 @@ class MTGPlayMenu(Screen):
 		else:
 			next = 'videos?format=%i&page=1' % channelId
 		count = 0
-		while next and count < 5:  # More than 5 pages are too long
+		while next and count < 2:  # For faster work using only 2 pages
 			count += 1
 			videos, next = self.callVideosFormat(next)
 			content.extend(videos)
