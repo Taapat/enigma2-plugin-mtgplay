@@ -368,7 +368,10 @@ class MTGPlayMenu(Screen):
 			if formats['streams']['hls']:
 				return str(formats['streams']['hls'])
 			elif formats['streams']['medium']:
-				return str(formats['streams']['medium']).replace('cache/', 'cache//')
+				return str(formats['streams']['medium'])\
+						.replace('cache/', 'cache//')\
+						.replace('.flv', '.mp4')\
+						.replace('/flv:', '/mp4:')
 		except:
 			return ''
 
