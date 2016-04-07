@@ -154,7 +154,6 @@ class MTGPlayMenu(Screen):
 		self.pictures = {}
 		self.picloads = {}
 		self.curPic = None
-		self.defPic = None
 		self.sc = AVSwitch().getFramebufferScale()
 		self.onLayoutFinish.append(self.LayoutFinish)
 		self.onClose.append(self.cleanVariables)
@@ -205,14 +204,13 @@ class MTGPlayMenu(Screen):
 			if image[:4] == '/tmp':
 				os.remove(image)
 			else:
-				self.defPic = pic
 				self.setImage(pic)
 
 	def setImage(self, image):
-		if image and image != self.defPic:
+		if image and image != 'defpic.png':
 			image = image.rsplit('/', 1)[1]
 		if not image or image not in self.pictures:
-			image = self.defPic
+			image = 'defpic.png'
 		if self.curPic != image and image in self.pictures:
 			self.curPic = image
 			self['pic'].instance.setPixmap(self.pictures[image])
@@ -250,7 +248,7 @@ class MTGPlayMenu(Screen):
 			else:
 				self['list'].setList(content)
 				self['descr'].setText('')
-				self.setImage(self.defPic)
+				self.setImage('defpic.png')
 				if self.menulist > 1:
 					self.createPictures(content)
 
