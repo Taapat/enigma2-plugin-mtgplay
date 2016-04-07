@@ -318,12 +318,12 @@ class MTGPlayMenu(Screen):
 					episode = '\n' + str(episode)
 				content.append((
 						str(x['title']).encode('utf-8'),
-						str(x['_links']['image']['href'])\
+						str(x['_links']['image']['href'])
 								.replace('{size}', '290x162').replace(' ', '%20'),
 						x['id'],
-						_('Latest video ') + str(x['latest_video']['publish_at'])\
-								.split('+', 1)[0].rsplit(':', 1)[0]\
-								.replace('T', ' ').encode('utf-8')+ episode))
+						_('Latest video ') + str(x['latest_video']['publish_at'])
+								.split('+', 1)[0].rsplit(':', 1)[0]
+								.replace('T', ' ').encode('utf-8') + episode))
 		except:
 			pass
 		try:
@@ -356,7 +356,7 @@ class MTGPlayMenu(Screen):
 			for x in formats['_embedded']['videos']:
 				content.append((
 						str(x['title']).encode('utf-8'),
-						str(x['_links']['image']['href'])\
+						str(x['_links']['image']['href'])
 								.replace('{size}', '290x162').replace(' ', '%20'),
 						x['id'],
 						str(x['description']).encode('utf-8')))
