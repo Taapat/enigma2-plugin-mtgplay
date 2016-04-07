@@ -233,16 +233,31 @@ class MTGPlayMenu(Screen):
 					self.playVideo(current[0], self.getVideoStream(current[2]))
 				else:
 					if self.menulist == 1:
-						content = self.listChannels(current[2])
+						try:
+							content = self.listChannels(current[2])
+						except:
+							content = []
 					elif self.menulist == 2:
-						content = self.listFormatsChannel(current[2])
+						try:
+							content = self.listFormatsChannel(current[2])
+						except:
+							content = []
 					elif self.menulist == 3:
-						content = self.listVideosFormat(current[2])
+						try:
+							content = self.listVideosFormat(current[2])
+						except:
+							content = []
 					elif self.menulist == 4:
 						self.menulist = 3
-						content = self.listVideosFormat(current[2])
-					content.insert(0, (_('Return back...'), None, 'back', ''))
-					self.storedContent[self.menulist] = content
+						try:
+							content = self.listVideosFormat(current[2])
+						except:
+							content = []
+					if content:
+						content.insert(0, (_('Return back...'), None, 'back', ''))
+						self.storedContent[self.menulist] = content
+					else:
+						self.menulist -= 1
 			if self.menulist > 3:
 				self.menulist = 3
 			else:
@@ -280,17 +295,11 @@ class MTGPlayMenu(Screen):
 		content = []
 		next = None
 		formats = self.callApi(channels)
-		try:
-			for x in formats['_embedded']['channels']:
-				if x['hostname'] == hostname:
-					content.append((str(x['name']), None, x['id'], ''))
-		except:
-			pass
-		try:
-			if 'next' in formats['_links']:
-				next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
-		except:
-			next = None
+		for x in formats['_embedded']['channels']:
+			if x['hostname'] == hostname:
+				content.append((str(x['name']), None, x['id'], ''))
+		if 'next' in formats['_links']:
+			next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
 		return content, next
 
 	def listFormatsChannel(self, channelId):
@@ -308,29 +317,23 @@ class MTGPlayMenu(Screen):
 		content = []
 		next = None
 		formats = self.callApi(videos)
-		try:
-			for x in formats['_embedded']['formats']:
-				episode = x['latest_video']['format_position']['episode']
-				try:
-					number = int(episode)
-					episode = ''
-				except:
-					episode = '\n' + str(episode)
-				content.append((
-						str(x['title']).encode('utf-8'),
-						str(x['_links']['image']['href'])
-								.replace('{size}', '290x162').replace(' ', '%20'),
-						x['id'],
-						_('Latest video ') + str(x['latest_video']['publish_at'])
-								.split('+', 1)[0].rsplit(':', 1)[0]
-								.replace('T', ' ').encode('utf-8') + episode))
-		except:
-			pass
-		try:
-			if 'next' in formats['_links']:
-				next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
-		except:
-			next = None
+		for x in formats['_embedded']['formats']:
+			episode = x['latest_video']['format_position']['episode']
+			try:
+				number = int(episode)
+				episode = ''
+			except:
+				episode = '\n' + str(episode)
+			content.append((
+					str(x['title']).encode('utf-8'),
+					str(x['_links']['image']['href'])
+							.replace('{size}', '290x162').replace(' ', '%20'),
+					x['id'],
+					_('Latest video ') + str(x['latest_video']['publish_at'])
+							.split('+', 1)[0].rsplit(':', 1)[0]
+							.replace('T', ' ').encode('utf-8') + episode))
+		if 'next' in formats['_links']:
+			next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
 		return content, next
 
 	def listVideosFormat(self, channelId):
@@ -352,47 +355,34 @@ class MTGPlayMenu(Screen):
 		content = []
 		next = None
 		formats = self.callApi(videos+'&order=-airdate')
-		try:
-			for x in formats['_embedded']['videos']:
-				content.append((
-						str(x['title']).encode('utf-8'),
-						str(x['_links']['image']['href'])
-								.replace('{size}', '290x162').replace(' ', '%20'),
-						x['id'],
-						str(x['description']).encode('utf-8')))
-		except:
-			pass
-		try:
-			if 'next' in formats['_links']:
-				next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
-		except:
-			next = None
+		for x in formats['_embedded']['videos']:
+			content.append((
+					str(x['title']).encode('utf-8'),
+					str(x['_links']['image']['href'])
+							.replace('{size}', '290x162').replace(' ', '%20'),
+					x['id'],
+					str(x['description']).encode('utf-8')))
+		if 'next' in formats['_links']:
+			next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
 		return content, next
 
 	def getVideoStream(self, channelId):
 		formats = self.callApi('videos/stream/%i' % channelId)
-		try:
-			if formats['streams']['hls']:
-				return str(formats['streams']['hls'])
-			elif formats['streams']['medium']:
-				return str(formats['streams']['medium'])\
-						.replace('cache/', 'cache//')\
-						.replace('.flv', '.mp4')\
-						.replace('/flv:', '/mp4:')
-		except:
-			pass
+		if formats['streams']['hls']:
+			return str(formats['streams']['hls'])
+		elif formats['streams']['medium']:
+			return str(formats['streams']['medium'])\
+					.replace('cache/', 'cache//')\
+					.replace('.flv', '.mp4')\
+					.replace('/flv:', '/mp4:')
 		return ''
 
 	def callApi(self, urlType):
 		url = 'http://playapi.mtgx.tv/v3/%s' % urlType
-		try:
-			response = urlopen(Request(url=url, headers={
-						'user-agent': 'MTG Play/1.0.3 CFNetwork/548.0.4 Darwin/11.0.0'
-					}))
-			return loads(response.read())
-		except Exception as ex:
-			print '[MTG Play] Error', ex
-			return []
+		response = urlopen(Request(url=url, headers={
+					'user-agent': 'MTG Play/1.0.3 CFNetwork/548.0.4 Darwin/11.0.0'
+				}))
+		return loads(response.read())
 
 	def playVideo(self, title, stream):
 		if stream:
