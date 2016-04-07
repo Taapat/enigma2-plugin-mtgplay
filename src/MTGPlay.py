@@ -260,7 +260,7 @@ class MTGPlayMenu(Screen):
 						self.menulist -= 1
 			if self.menulist > 3:
 				self.menulist = 3
-			else:
+			elif content:
 				self['list'].setList(content)
 				self['descr'].setText('')
 				self.setImage('defpic.png')
