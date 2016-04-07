@@ -224,43 +224,42 @@ class MTGPlayMenu(Screen):
 		current = self['list'].getCurrent()
 		if current:
 			print '[MTG Play] Select:', current[2], current[0]
+			content = []
 			if current[2] == 'back':
 				self.menulist -= 1
 				content = self.storedContent[self.menulist]
 			else:
 				self.menulist += 1
-				if self.menulist == 4 and '&page=' not in str(current[2]):
-					self.playVideo(current[0], self.getVideoStream(current[2]))
-				else:
-					if self.menulist == 1:
-						try:
-							content = self.listChannels(current[2])
-						except:
-							content = []
-					elif self.menulist == 2:
-						try:
-							content = self.listFormatsChannel(current[2])
-						except:
-							content = []
-					elif self.menulist == 3:
-						try:
-							content = self.listVideosFormat(current[2])
-						except:
-							content = []
-					elif self.menulist == 4:
-						self.menulist = 3
+				if self.menulist == 1:
+					try:
+						content = self.listChannels(current[2])
+					except:
+						pass
+				elif self.menulist == 2:
+					try:
+						content = self.listFormatsChannel(current[2])
+					except:
+						pass
+				elif self.menulist == 3:
+					try:
+						content = self.listVideosFormat(current[2])
+					except:
+						pass
+				elif self.menulist == 4:
+					if '&page=' in str(current[2]):
 						try:
 							content = self.listVideosFormat(current[2])
+							self.menulist -= 1
 						except:
-							content = []
-					if content:
-						content.insert(0, (_('Return back...'), None, 'back', ''))
-						self.storedContent[self.menulist] = content
+							pass
 					else:
-						self.menulist -= 1
-			if self.menulist > 3:
-				self.menulist = 3
-			elif content:
+						self.playVideo(current[0], self.getVideoStream(current[2]))
+				if content:
+					content.insert(0, (_('Return back...'), None, 'back', ''))
+					self.storedContent[self.menulist] = content
+				else:
+					self.menulist -= 1
+			if content:
 				self['list'].setList(content)
 				self['descr'].setText('')
 				self.setImage('defpic.png')
