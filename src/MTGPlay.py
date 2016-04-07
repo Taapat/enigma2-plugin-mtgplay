@@ -241,10 +241,17 @@ class MTGPlayMenu(Screen):
 					except:
 						pass
 				elif self.menulist == 3:
-					try:
-						content = self.listVideosFormat(current[2])
-					except:
-						pass
+					if '&page=' in str(current[2]):
+						try:
+							content = self.listFormatsChannel(current[2])
+							self.menulist -= 1
+						except:
+							pass
+					else:
+						try:
+							content = self.listVideosFormat(current[2])
+						except:
+							pass
 				elif self.menulist == 4:
 					if '&page=' in str(current[2]):
 						try:
@@ -303,18 +310,10 @@ class MTGPlayMenu(Screen):
 
 	def listFormatsChannel(self, channelId):
 		content = []
-		next = 'formats?channel=%i&page=1' % channelId
-		count = 0
-		while next and count < 6:  # More than 6 pages are too long
-			count += 1
-			videos, next = self.callFormatsChannel(next)
-			content.extend(videos)
-		content.sort(key=lambda x: x[0])
-		return content
-
-	def callFormatsChannel(self, videos):
-		content = []
-		next = None
+		if '&page=' in str(channelId):
+			videos = channelId
+		else:
+			videos = 'formats?channel=%i&page=1' % channelId
 		formats = self.callApi(videos)
 		for x in formats['_embedded']['formats']:
 			episode = x['latest_video']['format_position']['episode']
@@ -331,9 +330,12 @@ class MTGPlayMenu(Screen):
 					_('Latest video ') + str(x['latest_video']['publish_at'])
 							.split('+', 1)[0].rsplit(':', 1)[0]
 							.replace('T', ' ').encode('utf-8') + episode))
+		content.sort(key=lambda x: x[0])
 		if 'next' in formats['_links']:
-			next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
-		return content, next
+			content.append((_('Next videos...'), None,
+					str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1],
+					''))
+		return content
 
 	def listVideosFormat(self, channelId):
 		content = []
