@@ -314,7 +314,8 @@ class MTGPlayMenu(Screen):
 			for x in formats['_embedded']['formats']:
 				content.append((
 						str(x['title']).encode('utf-8'),
-						str(x['_links']['image']['href']).replace('{size}', '290x162'),
+						str(x['_links']['image']['href'])\
+								.replace('{size}', '290x162').replace(' ', '%20'),
 						x['id'], ''))
 		except:
 			pass
@@ -348,7 +349,8 @@ class MTGPlayMenu(Screen):
 			for x in formats['_embedded']['videos']:
 				content.append((
 						str(x['title']).encode('utf-8'),
-						str(x['_links']['image']['href']).replace('{size}', '290x162'),
+						str(x['_links']['image']['href'])\
+								.replace('{size}', '290x162').replace(' ', '%20'),
 						x['id'],
 						str(x['description']).encode('utf-8')))
 		except:
