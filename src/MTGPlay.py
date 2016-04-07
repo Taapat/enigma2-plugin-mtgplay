@@ -338,21 +338,9 @@ class MTGPlayMenu(Screen):
 	def listVideosFormat(self, channelId):
 		content = []
 		if '&page=' in str(channelId):
-			next = channelId
+			videos = channelId
 		else:
-			next = 'videos?format=%i&page=1' % channelId
-		count = 0
-		while next and count < 2:  # For faster work using only 2 pages
-			count += 1
-			videos, next = self.callVideosFormat(next)
-			content.extend(videos)
-		if next:
-			content.append((_('Next videos...'), None, next, ''))
-		return content
-
-	def callVideosFormat(self, videos):
-		content = []
-		next = None
+			videos = 'videos?format=%i&page=1' % channelId
 		formats = self.callApi(videos+'&order=-airdate')
 		for x in formats['_embedded']['videos']:
 			content.append((
@@ -362,8 +350,10 @@ class MTGPlayMenu(Screen):
 					x['id'],
 					str(x['description']).encode('utf-8')))
 		if 'next' in formats['_links']:
-			next = str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1]
-		return content, next
+			content.append((_('Next videos...'), None,
+					str(formats['_links']['next']['href']).rsplit('/v3/', 1)[1],
+					''))
+		return content
 
 	def getVideoStream(self, channelId):
 		formats = self.callApi('videos/stream/%i' % channelId)
