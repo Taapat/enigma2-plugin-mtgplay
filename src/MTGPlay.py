@@ -312,11 +312,20 @@ class MTGPlayMenu(Screen):
 		formats = self.callApi(videos)
 		try:
 			for x in formats['_embedded']['formats']:
+				episode = x['latest_video']['format_position']['episode']
+				try:
+					number = int(episode)
+					episode = ''
+				except:
+					episode = '\n' + str(episode)
 				content.append((
 						str(x['title']).encode('utf-8'),
 						str(x['_links']['image']['href'])\
 								.replace('{size}', '290x162').replace(' ', '%20'),
-						x['id'], ''))
+						x['id'],
+						_('Latest video ') + str(x['latest_video']['publish_at'])\
+								.split('+', 1)[0].rsplit(':', 1)[0]\
+								.replace('T', ' ').encode('utf-8')+ episode))
 		except:
 			pass
 		try:
