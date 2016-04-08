@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-02 23:01+0300\n"
+"POT-Creation-Date: 2016-04-08 22:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,34 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: MTGPlay.py:399
+#: MTGPlay.py:398
 #, python-format
 msgid ""
 "Can not play: %s\n"
 "Perhaps content is not provided for this region."
 msgstr ""
 
-#: MTGPlay.py:139
+#: MTGPlay.py:260
+msgid "Error in getting information!"
+msgstr ""
+
+#: MTGPlay.py:142
 msgid "Exit"
 msgstr ""
 
-#: plugin.py:19 MTGPlay.py:44 MTGPlay.py:137
+#: plugin.py:19 MTGPlay.py:44 MTGPlay.py:140
 msgid "MTG Play"
 msgstr ""
 
-#: MTGPlay.py:342
+#: MTGPlay.py:331 MTGPlay.py:357
 msgid "Next videos..."
 msgstr ""
 
-#: MTGPlay.py:140
+#: MTGPlay.py:143
 msgid "Ok"
 msgstr ""
 
-#: MTGPlay.py:248
+#: MTGPlay.py:253
 msgid "Return back..."
 msgstr ""
 
