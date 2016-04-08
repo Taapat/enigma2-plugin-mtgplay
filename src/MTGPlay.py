@@ -330,9 +330,8 @@ class MTGPlayMenu(Screen):
 					str(x['_links']['image']['href'])
 							.replace('{size}', self.defpic[:-4]).replace(' ', '%20'),
 					x['id'],
-					_('Latest video ') + str(x['latest_video']['publish_at'])
-							.split('+', 1)[0].rsplit(':', 1)[0]
-							.replace('T', ' ').encode('utf-8') + episode))
+					str(x['latest_video']['publish_at'])
+							.split('T', 1)[0] + episode))
 		content.sort(key=lambda x: x[0])
 		if 'next' in formats['_links']:
 			content.append((_('Next videos...'), None,
