@@ -57,6 +57,7 @@ class MTGPlayer(MoviePlayer):
 class MTGPlayMenu(Screen):
 	screenWidth = getDesktop(0).size().width()
 	if screenWidth and screenWidth == 1280:
+		defpic = '210x140.png'
 		skin = """
 			<screen position="center,center" size="720,400">
 				<widget source="list" render="Listbox" position="10,10" size="360,330" \
@@ -70,8 +71,8 @@ class MTGPlayMenu(Screen):
 					}
 					</convert>
 				</widget>
-				<widget name="pic" position="400,10" size="290,162" alphatest="on" />
-				<widget name="descr" position="380,175" size="330,170" halign="center" font="Regular;18" />
+				<widget name="pic" position="440,10" size="210,140" alphatest="on" />
+				<widget name="descr" position="380,155" size="330,190" halign="center" font="Regular;18" />
 				<ePixmap position="154,351" size="140,40" pixmap="skin_default/buttons/red.png" \
 					transparent="1" alphatest="on" />
 				<ePixmap position="418,351" size="140,40" pixmap="skin_default/buttons/green.png" \
@@ -82,6 +83,7 @@ class MTGPlayMenu(Screen):
 					valign="center" halign="center" font="Regular;22" transparent="1" />
 			</screen>"""
 	elif screenWidth and screenWidth == 1920:
+		defpic = '290x162.png'
 		skin = """
 			<screen position="center,center" size="1080,600">
 				<widget source="list" render="Listbox" position="15,15" size="540,495" \
@@ -107,6 +109,7 @@ class MTGPlayMenu(Screen):
 					valign="center" halign="center" font="Regular;33" transparent="1" />
 			</screen>"""
 	else:
+		defpic = '210x140.png'
 		skin = """
 			<screen position="center,center" size="620,400">
 				<widget source="list" render="Listbox" position="10,10" size="280,330" \
@@ -120,8 +123,8 @@ class MTGPlayMenu(Screen):
 					}
 					</convert>
 				</widget>
-				<widget name="pic" position="310,10" size="290,162" alphatest="on" />
-				<widget name="descr" position="300,175" size="320,164" halign="center" font="Regular;18" />
+				<widget name="pic" position="350,10" size="210,140" alphatest="on" />
+				<widget name="descr" position="300,155" size="320,184" halign="center" font="Regular;18" />
 				<ePixmap position="104,351" size="140,40" pixmap="skin_default/buttons/red.png" \
 					transparent="1" alphatest="on" />
 				<ePixmap position="368,351" size="140,40" pixmap="skin_default/buttons/green.png" \
@@ -183,7 +186,7 @@ class MTGPlayMenu(Screen):
 		self.storedContent[0] = content
 		self['list'].setList(content)
 		image = resolveFilename(SCOPE_PLUGINS,
-				'Extensions/MTGPlay/defpic.png')
+				'Extensions/MTGPlay/' + self.defpic)
 		self.decodePic(image)
 
 	def decodePic(self, image):
@@ -207,10 +210,10 @@ class MTGPlayMenu(Screen):
 				self.setImage(pic)
 
 	def setImage(self, image):
-		if image and image != 'defpic.png':
+		if image and image != self.defpic:
 			image = image.rsplit('/', 1)[1]
 		if not image or image not in self.pictures:
-			image = 'defpic.png'
+			image = self.defpic
 		if self.curPic != image and image in self.pictures:
 			self.curPic = image
 			self['pic'].instance.setPixmap(self.pictures[image])
@@ -269,7 +272,7 @@ class MTGPlayMenu(Screen):
 			if content:
 				self['list'].setList(content)
 				self['descr'].setText('')
-				self.setImage('defpic.png')
+				self.setImage(self.defpic)
 				if self.menulist > 1:
 					self.createPictures(content)
 
@@ -325,7 +328,7 @@ class MTGPlayMenu(Screen):
 			content.append((
 					str(x['title']).encode('utf-8'),
 					str(x['_links']['image']['href'])
-							.replace('{size}', '290x162').replace(' ', '%20'),
+							.replace('{size}', self.defpic[:-4]).replace(' ', '%20'),
 					x['id'],
 					_('Latest video ') + str(x['latest_video']['publish_at'])
 							.split('+', 1)[0].rsplit(':', 1)[0]
@@ -348,7 +351,7 @@ class MTGPlayMenu(Screen):
 			content.append((
 					str(x['title']).encode('utf-8'),
 					str(x['_links']['image']['href'])
-							.replace('{size}', '290x162').replace(' ', '%20'),
+							.replace('{size}', self.defpic[:-4]).replace(' ', '%20'),
 					x['id'],
 					str(x['description']).encode('utf-8')))
 		if 'next' in formats['_links']:
