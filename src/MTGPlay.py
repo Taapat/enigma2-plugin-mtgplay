@@ -257,8 +257,8 @@ class MTGPlayMenu(Screen):
 					if self.menulist < 3:
 						print '[MTG Play] Error in getting information!'
 						self.session.open(MessageBox,
-								_('Error in getting information!')
-								, MessageBox.TYPE_ERROR)
+								_('Error in getting information!'),
+								MessageBox.TYPE_ERROR)
 			if content:
 				self['list'].setList(content)
 				self['descr'].setText('')
@@ -349,9 +349,9 @@ class MTGPlayMenu(Screen):
 								.replace('{size}', self.defpic[:-4])
 								.replace(' ', '%20'),
 						x['id'],
-						str(x['publish_at']).split('T', 1)[0] +\
+						str(x['publish_at']).split('T', 1)[0] +
 								'        %d:%02d\n' % (x['duration'] / 60,
-								x['duration'] % 60) +\
+								x['duration'] % 60) +
 								str(x['description']).encode('utf-8')))
 			if 'next' in formats['_links']:
 				content.append((_('Next videos...'), None,
